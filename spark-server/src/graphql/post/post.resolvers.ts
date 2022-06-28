@@ -16,6 +16,7 @@ type inputPost = {
   images: [string];
 };
 
+
 type post = {
   id: number;
   title: string;
@@ -124,37 +125,63 @@ export default {
       });
       return postInfo;
     },
-    async getPostsByHashtag(_: any, args: { hashtag_id: number }) {
-      const getPostsByHashtagQuery = `select posts.* FROM posts, posts_hashtags where posts_hashtags.hashtag_id = :hashtag_id and posts.id = posts_hashtags.post_id`;
-      const getPostsByHashtagValue = {
-        hashtag_id: args.hashtag_id,
-      };
-      const posts = await sequelize.query(getPostsByHashtagQuery, {
-        replacements: getPostsByHashtagValue,
-      });
-      return posts[0];
-    },
-  },
-  Mutation: {
-    async createPost(_: any, args: inputPost) {
-      let post = await postModel.create({
-        title: args.title,
-        post_content: args.post_content,
-        user_id: args.user_id,
-      });
-      if (!post) {
-        return status.SERVER_ERROR;
-      }
+    Mutation: {
+        async createPost(_:any, args:inputPost) {
+            if(!verifyAccessToken(args.access_token)){
+                return status.TOKEN_EXPIRED
+            }
 
-      for (let image of args.images) {
-        let savedImage = await imageModel.create({
-          image_path: image,
-          post_id: post.id,
-        });
-        if (!savedImage) {
-          return status.SERVER_ERROR;
-        }
-      }
+            let post = await postModel.create({
+                title:args.title,
+                post_content:args.post_content,
+                user_id:args.user_id
+            });
+
+            if(!post) {
+                return status.SERVER_ERROR
+            }
+
+            let userInfo = await userModel.findOne({
+                where: {
+                    id:args.user_id
+                }
+            })
+            if(userInfo) {
+               sendTokenToWriter(userInfo.account, userInfo.id)
+              
+            }
+
+            if(args.images != null && args.images.length > 0) {
+                for (let image of args.images) {
+                    let savedImage = await imageModel.create({
+                        image_path: image,
+                        post_id:post.id
+                    })
+                    if(!savedImage) {
+                        return status.SERVER_ERROR
+                    }
+                }
+            }
+
+            if(args.hashtags != null && args.hashtags.length > 0) {
+                for (let inputHashtag of args.hashtags) {
+                    var hashtag = await hashtagModel.findOne({
+                        where: {
+                            hashtag:inputHashtag 
+                        }
+                    })
+                    if(!hashtag) {
+                        hashtag = await hashtagModel.create({
+                            hashtag:inputHashtag
+                        })
+                    }
+                    await postHashtagModel.create({
+                        post_id:post.id,
+                        hashtag_id: hashtag.id
+                    })
+                    
+                } 
+            }
 
       for (let inputHashtag of args.hashtags) {
         var hashtag = await hashtagModel.findOne({
