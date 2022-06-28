@@ -33,3 +33,11 @@ export interface GetPosts {
 export interface BackColor {
   backgroundColor: string;
 }
+
+export interface Results {
+  getPosts: GetPosts[];
+}
+
+export interface ResultsHashTag {
+  getPostsByHashtag: GetPosts[];
+}
