@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
-import NavBar from "../components/NavBar";
+import MainList from "../components/MainList";
+import { useRecoilState } from "recoil";
+import { postsState } from "../states/spark";
 
 // export async function getStaticProps() {
 //     const { data } = await client.query({
@@ -17,7 +17,7 @@ import NavBar from "../components/NavBar";
 //         }
 //       `,
 //     });
-  
+
 //     return {
 //       props: {
 //         User: data.countries.slice(0, 4),
@@ -26,13 +26,11 @@ import NavBar from "../components/NavBar";
 //   }
 
 export default function Mypage() {
+  const [postData] = useRecoilState(postsState);
 
-
-    return (
-        <div>
-            <NavBar/>
-            마이페이지
-        </div>
-
-    )
+  return (
+    <>
+      <MainList data={postData} />
+    </>
+  );
 }
