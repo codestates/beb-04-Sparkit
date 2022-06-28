@@ -171,18 +171,20 @@ const Aside = ({ setTitle }: Props) => {
             </AsideLi>
           </ul>
         </AsideDiv>
-        <AsideDiv backgroundColor={`${darkTheme.contentColor}`}>
-          <nav>
-            <ul>
-              <AsideLi>
-                <AsideLiButton type="button" onClick={handleTagAllClick}>
-                  전체 태그
-                </AsideLiButton>
-              </AsideLi>
-              {obj !== [] && tagList}
-            </ul>
-          </nav>
-        </AsideDiv>
+        {pathname !== "/MyPage" && (
+          <AsideDiv backgroundColor={`${darkTheme.contentColor}`}>
+            <nav>
+              <ul>
+                <AsideLi>
+                  <AsideLiButton type="button" onClick={handleTagAllClick}>
+                    전체 태그
+                  </AsideLiButton>
+                </AsideLi>
+                {obj !== [] && tagList}
+              </ul>
+            </nav>
+          </AsideDiv>
+        )}
       </AsideContainer>
     </AsideAside>
   );
