@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import SEO from "../../components/SEO";
 
@@ -8,7 +8,7 @@ import LikeAndComment from "../../components/LikeAndComment";
 
 import { darkTheme } from "../../styles/theme";
 
-import Layout from "../../components/Layout";
+import { GetPosts } from "../../types/spark";
 
 interface Params {
   params: { params: string[] };
@@ -80,7 +80,6 @@ export default function Post({ params }: Props) {
   const [isLiked, setIsLiked] = useState(0);
 
   const [post_title, post_id] = params || [];
-  console.log(post_title, post_id, "dasdsa");
 
   const postId = Number(post_id);
   const {
@@ -105,7 +104,6 @@ export default function Post({ params }: Props) {
       },
     });
   };
-  console.log(data, loading);
   if (!data)
     return (
       <DetailContainer>
@@ -116,24 +114,24 @@ export default function Post({ params }: Props) {
   const { title } = getPost;
   const { nickname } = getPost.writer ?? "nickname";
   const { content } = getPost;
-  const { like } = getPost;
+  const { hashtags } = getPost;
+  const { likes } = getPost;
+
   return (
-    <Layout>
-      <DetailContainer>
-        <SEO title={post_title} />
-        <PostContent>
-          <PostHeader>
-            <PostTitle>{title ?? "title"}</PostTitle>
-            <PostUser>{nickname}</PostUser>
-          </PostHeader>
-          <PostBody>
-            <LikeAndComment />
-          </PostBody>
-        </PostContent>
-        <Content>{content ?? ""}</Content>
-        <LikeBtn onClick={onClick}>{like ? like : 0}</LikeBtn>
-      </DetailContainer>
-    </Layout>
+    <DetailContainer>
+      <SEO title={post_title} />
+      <PostContent>
+        <PostHeader>
+          <PostTitle>{title ?? "title"}</PostTitle>
+          <PostUser>{nickname}</PostUser>
+        </PostHeader>
+        <PostBody>
+          <LikeAndComment postData={getPost} />
+        </PostBody>
+      </PostContent>
+      <Content />
+      <LikeBtn onClick={onClick}>{likes ? likes : 0}</LikeBtn>
+    </DetailContainer>
   );
 }
 
