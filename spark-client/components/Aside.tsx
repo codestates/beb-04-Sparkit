@@ -75,7 +75,11 @@ const ALL_POST_BY_HASHTAG = gql`
   }
 `;
 
-const Aside = () => {
+interface Props {
+  setTitle: Function;
+}
+
+const Aside = ({ setTitle }: Props) => {
   const { data, refetch } = useQuery<Results>(ALL_POST);
   const { data: data2 } = useQuery<Results2>(ALL_POST_BY_HASHTAG, {
     variables: { hashtagId: 34 },
@@ -111,14 +115,16 @@ const Aside = () => {
     return arr;
   };
 
-  const handleTagClick = (item: number) => {
+  const handleTagClick = (item: number, name: string) => {
     if (!data2) return;
     setPostData(data2.getPostsByHashtag);
+    setTitle(name);
   };
   const handleTagAllClick = () => {
     refetch();
     if (!data) return;
     setPostData(data.getPosts);
+    setTitle("전체 태그");
   };
 
   useEffect(() => {
@@ -145,7 +151,10 @@ const Aside = () => {
     return obj.slice(0, 7).map((item, index) => {
       return (
         <AsideLi key={item.name + index}>
-          <AsideLiButton type="button" onClick={() => handleTagClick(item.id)}>
+          <AsideLiButton
+            type="button"
+            onClick={() => handleTagClick(item.id, item.name)}
+          >
             {item.name}
           </AsideLiButton>
         </AsideLi>

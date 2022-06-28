@@ -15,10 +15,11 @@ type Props = {
 const Main = (props: Props) => {
   const router = useRouter();
   const [io, setIo] = useState<IntersectionObserver | null>(null);
+  const [title, setTitle] = useState("전체 태그");
   const endList = useRef<HTMLDivElement>(null);
 
   const pathName = router.pathname;
-  const title = pathName === "/detail/[...params]" ? "detail" : "전체 태그";
+  // const title = pathName === "/detail/[...params]" ? "detail" : "전체 태그";
   useEffect(() => {
     const targetIO = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -34,7 +35,7 @@ const Main = (props: Props) => {
   return (
     <MainMain>
       <MainDiv>
-        <Aside />
+        <Aside setTitle={setTitle} />
         <Section>
           <MainHeadDiv>
             <h1>{title}</h1>
