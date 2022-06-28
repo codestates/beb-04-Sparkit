@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useState, useEffect, useMemo, MouseEvent } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { postsState } from "../states/spark";
 import { gql, useQuery } from "@apollo/client";
 import { darkTheme } from "../styles/theme";
 import { useRouter } from "next/router";
-import { GetPosts, Hashtags, BackColor, Tags } from "../types/spark";
+import { ResultsHashTag, Results, BackColor, Tags } from "../types/spark";
 
 interface TagsCount {
   [name: string]: { id: number; count: number };
@@ -15,14 +15,6 @@ interface Obj {
   name: string;
   id: number;
   count: number;
-}
-
-interface Results {
-  getPosts: GetPosts[];
-}
-
-interface Results2 {
-  getPostsByHashtag: GetPosts[];
 }
 
 const ALL_POST = gql`
@@ -81,7 +73,7 @@ interface Props {
 
 const Aside = ({ setTitle }: Props) => {
   const { data, refetch } = useQuery<Results>(ALL_POST);
-  const { data: data2 } = useQuery<Results2>(ALL_POST_BY_HASHTAG, {
+  const { data: data2 } = useQuery<ResultsHashTag>(ALL_POST_BY_HASHTAG, {
     variables: { hashtagId: 34 },
   });
   const [, setPostData] = useRecoilState(postsState);
@@ -137,6 +129,7 @@ const Aside = ({ setTitle }: Props) => {
 
     setTags(tags);
     setPostData(data.getPosts);
+    console.log(data);
   }, [data]);
 
   useEffect(() => {
