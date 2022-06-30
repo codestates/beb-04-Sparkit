@@ -3,8 +3,9 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
 import { useLayoutEffect, useState } from "react";
 import { GetPosts } from "../../types/spark";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GetPostsByUserId } from "../../types/spark";
+import { LIKEIT } from "../../query/MutationQuery";
 
 import { useRecoilState } from "recoil";
 import { userIdState } from "../../states/spark";
@@ -61,11 +62,6 @@ interface Props {
   postData: GetPosts;
 }
 
-const LIKEIT = gql`
-  mutation CreateLikes($postId: Int, $userId: Int, $accessToken: String) {
-    createLikes(post_id: $postId, user_id: $userId, access_token: $accessToken)
-  }
-`;
 const LikeAndComment = ({ postData }: Props) => {
   const { likes } = postData;
 
