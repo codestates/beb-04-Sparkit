@@ -11,17 +11,23 @@
   },
   "dependencies": {
     "@apollo/client": "^3.6.8",
+    "@hookform/resolvers": "^2.9.2",
     "@types/styled-components": "^5.1.25",
+    "axios": "^0.27.2",
     "graphql": "^16.5.0",
+    "js-sha256": "^0.9.0",
     "next": "12.1.6",
     "polished": "^4.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.32.2",
+    "react-icons": "^4.4.0",
     "react-router-dom": "^6.3.0",
+    "recoil": "^0.7.4",
     "styled-components": "^5.3.5",
     "styled-reset": "^4.4.1",
-    "use-query": "^1.0.2"
+    "use-query": "^1.0.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",

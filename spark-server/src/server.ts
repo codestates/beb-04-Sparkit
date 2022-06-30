@@ -6,8 +6,10 @@ import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { sequelize } from "./models";
 import "reflect-metadata";
 import { resolvers, typeDefs } from "./graphql/schema";
-
-require("dotenv").config();
+import Web3 from "web3";
+export const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+import dotenv from "dotenv";
+dotenv.config();
 
 const SPARK_IT_SERVER_PORT = 4000;
 const app = express();
@@ -41,12 +43,12 @@ async function initApolloServer() {
   //DB 싱크
   await sequelize
     .sync({ force: false }) // force:true 로 변경시 서버 재시작 할 때마다 테이블 삭제
-    .then(async () => {
+    .then(() => {
       console.log("seq connection success");
     })
-    .catch((e: any) => {
+    .catch((e: Error) => {
       console.log("seq ERROR: ", e);
     });
 }
 
-initApolloServer();
+void initApolloServer();
